@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        apt -y install mosquitto-clients
+        sudo apt -y install mosquitto-clients
         mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         cat data
         TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
