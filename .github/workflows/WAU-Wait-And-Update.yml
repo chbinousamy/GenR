@@ -32,7 +32,7 @@ jobs:
         PRECIP=$(cat data | grep 4113 | awk '{printf "%f", $2}')
         UV=$(cat data | grep 4190 | awk '{printf "%f", $2}')
         echo curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
-        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":0, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
         echo
         date "+%H:%M:%S %d/%m/%y"
     
