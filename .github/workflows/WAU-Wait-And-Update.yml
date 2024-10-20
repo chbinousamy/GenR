@@ -19,6 +19,7 @@ jobs:
     - name: wau-wait-and-update
       run: |
         sudo apt -y install mosquitto-clients
+        echo mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         cat data
         TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
@@ -29,5 +30,6 @@ jobs:
         WIND=$(cat data | grep 4105 | awk '{printf "%f", $2}')
         PRECIP=$(cat data | grep 4113 | awk '{printf "%f", $2}')
         UV=$(cat data | grep 4190 | awk '{printf "%f", $2}')
-        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":0, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' ${{ secrets.WINDY_URL }}/${{ secrets.WINDY_API_KEY }}
+        echo curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":0, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":0, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
     
