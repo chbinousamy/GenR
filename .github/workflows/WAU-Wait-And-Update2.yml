@@ -1,0 +1,38 @@
+# This is a basic workflow to Relay Weather info from SenseCAP LoRaWAN S2120 Weather Station to Windy Stations
+
+name: WAU-Wait-And-Update
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  schedule: # 8 min offset then every 15 min
+  - cron: "8-59/15 * * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  # This workflow contains a single job called "WAU"
+  wau-wait-and-update:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+    - name: wau-wait-and-update
+      run: |
+        date "+%H:%M:%S %d/%m/%y"
+        sudo apt -y install mosquitto-clients
+        echo mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
+        mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
+        cat data
+        TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
+        TEMP=$(cat data | grep 4097 | awk '{printf "%f", $2}')
+        HUMIDITY=$(cat data | grep 4098 | awk '{printf "%d", $2}')
+        PRESSURE=$(cat data | grep 4101 | awk '{printf "%d", $2}')
+        WINDIR=$(cat data | grep 4104 | awk '{printf "%d", $2}')
+        WIND=$(cat data | grep 4105 | awk '{printf "%f", $2}')
+        PRECIP=$(cat data | grep 4113 | awk '{printf "%f", $2}')
+        UV=$(cat data | grep 4190 | awk '{printf "%f", $2}')
+        echo curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        echo
+        date "+%H:%M:%S %d/%m/%y"
+    
