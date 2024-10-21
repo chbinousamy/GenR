@@ -1,6 +1,6 @@
 # This is a basic workflow to Relay Weather info from SenseCAP LoRaWAN S2120 Weather Station to Windy Stations
 
-name: WAU-Wait-And-Update
+name: WAU-Wait-And-Update 1
 
 # Controls when the workflow will run
 on:
