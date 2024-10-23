@@ -74,7 +74,6 @@ jobs:
         echo $command
 
         command="$command}]}' https://stations.windy.com/pws/update/\${{ secrets.WINDY_API_KEY }}"
-        echo $command
         $command
         echo
         date "+%H:%M:%S %d/%m/%y"
