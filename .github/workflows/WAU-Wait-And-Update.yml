@@ -54,12 +54,12 @@ jobs:
         #if [[ -z $TEMP || -z $HUMIDITY ]]; then
         #  echo "One of TEMP or HUMIDITY is blank"
         #else
-        ALPHA=$(bc -l <<< "l($HUMIDITY/100) + 17.625*$TEMP/(243.04+$TEMP)")
-        DEWT=$(bc -l <<< "(243.04 * $ALPHA / (17.625 - $ALPHA))")
-        DEWT=`printf "%.2f" $DEWT
+        #ALPHA=$(bc -l <<< "l($HUMIDITY/100) + 17.625*$TEMP/(243.04+$TEMP)")
+        #DEWT=$(bc -l <<< "(243.04 * $ALPHA / (17.625 - $ALPHA))")
+        #DEWT=`printf "%.2f" $DEWT
         #fi
-        if [ -z "$DEWT" ]; then echo "DEWT is blank"; else command="$command, \"dewpoint\":$DEWT"; fi
-        echo $command
+        #if [ -z "$DEWT" ]; then echo "DEWT is blank"; else command="$command, \"dewpoint\":$DEWT"; fi
+        #echo $command
 
         PRESSURE=$(cat data | grep 4101 | awk '{printf "%d", $2}')
         if [ -z "$PRESSURE" ]; then echo "PRESSURE is blank"; else command="$command, \"pressure\":$PRESSURE"; fi
