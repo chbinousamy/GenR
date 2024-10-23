@@ -72,10 +72,10 @@ jobs:
         UV=$(cat data | grep 4190 | awk '{printf "%.1f", $2}')
         if [ -z "$UV" ]; then echo "UV is blank"; else command="$command, \"uv\":$UV"; fi
         echo $command
-        $command
 
         command="$command}]}' https://stations.windy.com/pws/update/\${{ secrets.WINDY_API_KEY }}"
         echo $command
+        $command
         echo
         date "+%H:%M:%S %d/%m/%y"
     
