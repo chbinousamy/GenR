@@ -75,6 +75,8 @@ jobs:
         echo $command
 
         command=$command$command_end
+        echo $command
+        echo
         $command
         echo
         date "+%H:%M:%S %d/%m/%y"
