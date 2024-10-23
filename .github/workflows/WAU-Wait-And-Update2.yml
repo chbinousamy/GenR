@@ -32,8 +32,12 @@ jobs:
         GUST=$(cat data | grep 4191 | awk '{printf "%f", $2}')
         PRECIP=$(cat data | grep 4113 | awk '{printf "%f", $2}')
         UV=$(cat data | grep 4190 | awk '{printf "%f", $2}')
-        echo curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "gust":'$GUST', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
-        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "gust":'$GUST', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        ## Point de Rosée
+        ALPHA=$(bc -l <<< "l($HR/100) + 17.625*$TEMP/(243.04+$TEMP)")
+        DEWT=$(bc -l <<< "(243.04 * $ALPHA / (17.625 - $ALPHA))")
+        echo Point de Rosée: $DEWT
+        echo curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "dewpoint":'$DEWT', "wind":'$WIND', "winddir":'$WINDIR', "gust":'$GUST', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "dewpoint":'$DEWT', "wind":'$WIND', "winddir":'$WINDIR', "gust":'$GUST', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
         echo
         date "+%H:%M:%S %d/%m/%y"
     
