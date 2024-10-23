@@ -51,7 +51,7 @@ jobs:
         if [ -z "$HUMIDITY" ]; then echo "HUMIDITY is blank"; else command="$command, \"humidity\":$HUMIDITY"; fi
         echo $command
 
-        if [[ -z "$TEMP" || -z "$HUMIDITY" ]]; then
+        if [[ -z $TEMP || -z $HUMIDITY ]]; then
           echo "One of TEMP or HUMIDITY is blank"
         else
           ALPHA=$(bc -l <<< "l($HUMIDITY/100) + 17.625*$TEMP/(243.04+$TEMP)")
