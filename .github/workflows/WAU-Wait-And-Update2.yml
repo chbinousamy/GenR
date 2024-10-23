@@ -29,10 +29,11 @@ jobs:
         PRESSURE=$(cat data | grep 4101 | awk '{printf "%d", $2}')
         WINDIR=$(cat data | grep 4104 | awk '{printf "%d", $2}')
         WIND=$(cat data | grep 4105 | awk '{printf "%f", $2}')
+        GUST=$(cat data | grep 4191 | awk '{printf "%f", $2}')
         PRECIP=$(cat data | grep 4113 | awk '{printf "%f", $2}')
         UV=$(cat data | grep 4190 | awk '{printf "%f", $2}')
-        echo curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
-        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        echo curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "gust":'$GUST', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "gust":'$GUST', "humidity":'$HUMIDITY', "precip":'$PRECIP', "pressure":'$PRESSURE', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
         echo
         date "+%H:%M:%S %d/%m/%y"
     
