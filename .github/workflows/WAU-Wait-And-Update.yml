@@ -23,6 +23,7 @@ jobs:
         echo mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         cat data
+        TEMP=0 && HUMIDITY=0 && PRESSURE=0 && WINDIR=0 && WIND=0 && GUST=0 && PRECIP=0 && UV = 0
         TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
         TEMP=$(cat data | grep 4097 | awk '{printf "%f", $2}')
         HUMIDITY=$(cat data | grep 4098 | awk '{printf "%d", $2}')
