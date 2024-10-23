@@ -27,7 +27,7 @@ jobs:
         #echo $curl_data
         
         TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
-        echo $TIME
+        echo TIME=$TIME
         if [ -z "$TIME" ]; then echo "TIME is blank"; else curl_data="$curl_data, \"ts\":$TIME"; fi
         #echo $curl_data
         
