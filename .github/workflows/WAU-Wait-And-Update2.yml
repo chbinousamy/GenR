@@ -76,5 +76,3 @@ jobs:
         curl_data=$curl_data}]} && echo $curl_data | jq > data.json && cat data.json && echo
         curl -X POST -H "Content-Type: application/json" --data @data.json https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
         echo && date "+%H:%M:%S %d/%m/%y"
-
-
