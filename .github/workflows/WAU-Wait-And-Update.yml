@@ -23,7 +23,8 @@ jobs:
         echo mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         cat data
-        command="curl -X POST -H \"Content-Type: application/json\" -d \'{\"observations\":[{\"station\":2"
+        command="curl -X POST -H \"Content-Type: application/json\" -d '{\"observations\":[{\"station\":2"
+        command_end="}]}' https://stations.windy.com/pws/update/\${{ secrets.WINDY_API_KEY }}"
         echo $command
         
         TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
@@ -73,7 +74,7 @@ jobs:
         if [ -z "$UV" ]; then echo "UV is blank"; else command="$command, \"uv\":$UV"; fi
         echo $command
 
-        command="$command}]}\' https://stations.windy.com/pws/update/\${{ secrets.WINDY_API_KEY }}"
+        command=$command$command_end
         $command
         echo
         date "+%H:%M:%S %d/%m/%y"
