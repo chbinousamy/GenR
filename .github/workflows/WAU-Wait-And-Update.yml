@@ -23,7 +23,7 @@ jobs:
         echo mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         cat data
-        curl_data='{\"observations\":[{\"station\":2"
+        curl_data=\'{\"observations\":[{\"station\":2"
         echo $curl_data
         
         TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
@@ -73,7 +73,7 @@ jobs:
         if [ -z "$UV" ]; then echo "UV is blank"; else curl_data="$curl_data, \"uv\":$UV"; fi
         echo $curl_data
 
-        curl_data=$curl_data}]}'
+        curl_data=$curl_data}]}\'
         command=curl -X POST -H \"Content-Type: application/json\" --data "$curl_data" https://stations.windy.com/pws/update/\${{ secrets.WINDY_API_KEY }}
         echo $command
         echo
