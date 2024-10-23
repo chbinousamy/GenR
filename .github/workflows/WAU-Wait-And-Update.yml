@@ -74,7 +74,7 @@ jobs:
         echo $curl_data
 
         curl_data=$curl_data}]}
-        command="curl -X POST -H \"Content-Type: application/json\" --data '$curl_data' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}"
+        command="curl -X POST --json '$curl_data' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}"
         echo $command
         echo
         $command
