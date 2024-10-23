@@ -62,7 +62,7 @@ jobs:
         #echo $curl_data
 
         PRESSURE=$(cat data | grep 4101 | awk '{printf "%d", $2}')
-        if [ -z "$PRESSURE" ]; then echo "PRESSURE is blank"; else mbar=$(bc -l <<< "$PRESSURE/100") && mbar=`printf "%.2f" $mbar` && curl_data="$curl_data, \"mbar\":$mbar"; fi
+        if [ -z "$PRESSURE" ]; then echo "PRESSURE is blank"; else curl_data="$curl_data, \"pressure\":$PRESSURE"; fi
         #echo $curl_data
 
         PRECIP=$(cat data | grep 4113 | awk '{printf "%.2f", $2}')
