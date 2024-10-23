@@ -23,23 +23,59 @@ jobs:
         echo mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         cat data
-        TEMP=0 && HUMIDITY=0 && PRESSURE=0 && WINDIR=0 && WIND=0 && GUST=0 && PRECIP=0 && UV=0
+        command="curl -X POST -H \"Content-Type: application/json\" -d '{\"observations\":[{\"station\":2"
+        echo $command
+        
         TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
-        TEMP=$(cat data | grep 4097 | awk '{printf "%.1f", $2}')
+        echo $TIME
+        if [ -z "$TIME" ]; then echo "TIME is blank"; else command="$command, \"ts\":$TIME"; fi
+        echo $command
+        
+        TEMP=$(cat data | grep 4097 | awk '{printf "%.2f", $2}')
+        if [ -z "$TEMP" ]; then echo "TEMP is blank"; else command="$command, \"temp\":$TEMP"; fi
+        echo $command
+
+        WIND=$(cat data | grep 4105 | awk '{printf "%.2f", $2}')
+        if [ -z "$WIND" ]; then echo "WIND is blank"; else command="$command, \"wind\":$WIND"; fi
+        echo $command
+
+        WINDDIR=$(cat data | grep 4104 | awk '{printf "%d", $2}')
+        if [ -z "$WINDDIR" ]; then echo "WINDDIR is blank"; else command="$command, \"winddir\":$WINDDIR"; fi
+        echo $command
+
+        GUST=$(cat data | grep 4191 | awk '{printf "%.2f", $2}')
+        if [ -z "$GUST" ]; then echo "GUST is blank"; else command="$command, \"gust\":$GUST"; fi
+        echo $command
+
         HUMIDITY=$(cat data | grep 4098 | awk '{printf "%d", $2}')
+        if [ -z "$HUMIDITY" ]; then echo "HUMIDITY is blank"; else command="$command, \"humidity\":$HUMIDITY"; fi
+        echo $command
+
+        if [[ -z "$TEMP" || -z "$HUMIDITY" ]]; then
+          echo "One of TEMP or HUMIDITY is blank"
+        else
+          ALPHA=$(bc -l <<< "l($HUMIDITY/100) + 17.625*$TEMP/(243.04+$TEMP)")
+          DEWT=$(bc -l <<< "(243.04 * $ALPHA / (17.625 - $ALPHA))")
+          DEWT=`printf "%.2f" $DEWT
+        fi
+        if [ -z "$DEWT" ]; then echo "DEWT is blank"; else command="$command, \"dewpoint\":$DEWT"; fi
+        echo $command
+
         PRESSURE=$(cat data | grep 4101 | awk '{printf "%d", $2}')
-        WINDIR=$(cat data | grep 4104 | awk '{printf "%d", $2}')
-        WIND=$(cat data | grep 4105 | awk '{printf "%.1f", $2}')
-        PRECIP=$(cat data | grep 4113 | awk '{printf "%.1f", $2}')
+        if [ -z "$PRESSURE" ]; then echo "PRESSURE is blank"; else command="$command, \"pressure\":$PRESSURE"; fi
+        echo $command
+
+        PRECIP=$(cat data | grep 4113 | awk '{printf "%.2f", $2}')
+        if [ -z "$PRECIP" ]; then echo "PRECIP is blank"; else command="$command, \"precip\":$PRECIP"; fi
+        echo $command
+
         UV=$(cat data | grep 4190 | awk '{printf "%.1f", $2}')
-        GUST=$(cat data | grep 4191 | awk '{printf "%.1f", $2}')
-        ## Point de Rosée
-        ALPHA=$(bc -l <<< "l($HUMIDITY/100) + 17.625*$TEMP/(243.04+$TEMP)")
-        DEWT=$(bc -l <<< "(243.04 * $ALPHA / (17.625 - $ALPHA))")
-        DEWT=`printf "%.1f" $DEWT`
-        echo Point de Rosée: $DEWT
-        echo curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "gust":'$GUST', "humidity":'$HUMIDITY', "dewpoint":'$DEWT', "pressure":'$PRESSURE', "precip":'$PRECIP', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
-        curl -X POST -H "Content-Type: application/json" -d '{"observations":[{"station":2, "ts":'$TIME', "temp":'$TEMP', "wind":'$WIND', "winddir":'$WINDIR', "gust":'$GUST', "humidity":'$HUMIDITY', "dewpoint":'$DEWT', "pressure":'$PRESSURE', "precip":'$PRECIP', "uv":'$UV'}]}' https://stations.windy.com/pws/update/${{ secrets.WINDY_API_KEY }}
+        if [ -z "$UV" ]; then echo "UV is blank"; else command="$command, \"uv\":$UV"; fi
+        echo $command
+
+        command="$command}]}' https://stations.windy.com/pws/update/\${{ secrets.WINDY_API_KEY }}"
+        echo $command
+        $command
         echo
         date "+%H:%M:%S %d/%m/%y"
     
