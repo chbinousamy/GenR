@@ -51,7 +51,7 @@ jobs:
         if [ -z "$HUMIDITY" ]; then echo "HUMIDITY is blank"; else curl_data="$curl_data, \"humidity\":$HUMIDITY"; fi
         # echo $curl_data
 
-        if [[ -z '$TEMP' || -z '$HUMIDITY' ]]; then
+        if [[ -z "$TEMP" || -z "$HUMIDITY" ]]; then
           echo "One of TEMP or HUMIDITY is blank"
         fi
         #else
