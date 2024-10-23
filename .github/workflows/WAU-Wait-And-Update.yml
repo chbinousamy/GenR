@@ -23,33 +23,33 @@ jobs:
         echo mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         mosquitto_sub -v -h ${{ secrets.SENSECAP_URL }} -t '/device_sensor_data/${{ secrets.OID }}/${{ secrets.EUI }}/1/vs/+' -u 'org-${{ secrets.OID }}' -P '${{ secrets.APIAccessKey}}' -I 'org-${{ secrets.OID }}-quickstart' -C 8 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
         cat data
-        command="curl -X POST -H \"Content-Type: application/json\" -d \"{\"observations\":[{\"station\":2"
-        echo $command
+        curl_data='{\"observations\":[{\"station\":2"
+        echo $curl_data
         
         TIME=$(cat data | grep 4097 | awk '{printf "%d", $3}')
         echo $TIME
-        if [ -z "$TIME" ]; then echo "TIME is blank"; else command="$command, \"ts\":$TIME"; fi
-        echo $command
+        if [ -z "$TIME" ]; then echo "TIME is blank"; else curl_data="$curl_data, \"ts\":$TIME"; fi
+        echo $curl_data
         
         TEMP=$(cat data | grep 4097 | awk '{printf "%.2f", $2}')
-        if [ -z "$TEMP" ]; then echo "TEMP is blank"; else command="$command, \"temp\":$TEMP"; fi
-        echo $command
+        if [ -z "$TEMP" ]; then echo "TEMP is blank"; else curl_data="$curl_data, \"temp\":$TEMP"; fi
+        echo $curl_data
 
         WIND=$(cat data | grep 4105 | awk '{printf "%.2f", $2}')
-        if [ -z "$WIND" ]; then echo "WIND is blank"; else command="$command, \"wind\":$WIND"; fi
-        echo $command
+        if [ -z "$WIND" ]; then echo "WIND is blank"; else curl_data="$curl_data, \"wind\":$WIND"; fi
+        echo $curl_data
 
         WINDDIR=$(cat data | grep 4104 | awk '{printf "%d", $2}')
-        if [ -z "$WINDDIR" ]; then echo "WINDDIR is blank"; else command="$command, \"winddir\":$WINDDIR"; fi
-        echo $command
+        if [ -z "$WINDDIR" ]; then echo "WINDDIR is blank"; else curl_data="$curl_data, \"winddir\":$WINDDIR"; fi
+        echo $curl_data
 
         GUST=$(cat data | grep 4191 | awk '{printf "%.2f", $2}')
-        if [ -z "$GUST" ]; then echo "GUST is blank"; else command="$command, \"gust\":$GUST"; fi
-        echo $command
+        if [ -z "$GUST" ]; then echo "GUST is blank"; else curl_data="$curl_data, \"gust\":$GUST"; fi
+        echo $curl_data
 
         HUMIDITY=$(cat data | grep 4098 | awk '{printf "%d", $2}')
-        if [ -z "$HUMIDITY" ]; then echo "HUMIDITY is blank"; else command="$command, \"humidity\":$HUMIDITY"; fi
-        echo $command
+        if [ -z "$HUMIDITY" ]; then echo "HUMIDITY is blank"; else curl_data="$curl_data, \"humidity\":$HUMIDITY"; fi
+        echo $curl_data
 
         #if [[ -z '$TEMP' || -z '$HUMIDITY' ]]; then
         #  echo "One of TEMP or HUMIDITY is blank"
@@ -58,22 +58,23 @@ jobs:
         #  DEWT=$(bc -l <<< "(243.04 * $ALPHA / (17.625 - $ALPHA))")
         #  DEWT=`printf "%.2f" $DEWT
         #fi
-        if [ -z "$DEWT" ]; then echo "DEWT is blank"; else command="$command, \"dewpoint\":$DEWT"; fi
-        echo $command
+        if [ -z "$DEWT" ]; then echo "DEWT is blank"; else curl_data="$curl_data, \"dewpoint\":$DEWT"; fi
+        echo $curl_data
 
         PRESSURE=$(cat data | grep 4101 | awk '{printf "%d", $2}')
-        if [ -z "$PRESSURE" ]; then echo "PRESSURE is blank"; else command="$command, \"pressure\":$PRESSURE"; fi
-        echo $command
+        if [ -z "$PRESSURE" ]; then echo "PRESSURE is blank"; else curl_data="$curl_data, \"pressure\":$PRESSURE"; fi
+        echo $curl_data
 
         PRECIP=$(cat data | grep 4113 | awk '{printf "%.2f", $2}')
-        if [ -z "$PRECIP" ]; then echo "PRECIP is blank"; else command="$command, \"precip\":$PRECIP"; fi
-        echo $command
+        if [ -z "$PRECIP" ]; then echo "PRECIP is blank"; else curl_data="$curl_data, \"precip\":$PRECIP"; fi
+        echo $curl_data
 
         UV=$(cat data | grep 4190 | awk '{printf "%.1f", $2}')
-        if [ -z "$UV" ]; then echo "UV is blank"; else command="$command, \"uv\":$UV"; fi
-        echo $command
+        if [ -z "$UV" ]; then echo "UV is blank"; else curl_data="$curl_data, \"uv\":$UV"; fi
+        echo $curl_data
 
-        command=$command}]}\" https://stations.windy.com/pws/update/\${{ secrets.WINDY_API_KEY }}
+        curl_data=$curl_data}]}'
+        command=curl -X POST -H \"Content-Type: application/json\" --data "$curl_data" https://stations.windy.com/pws/update/\${{ secrets.WINDY_API_KEY }}
         echo $command
         echo
         $command
