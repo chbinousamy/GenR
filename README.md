@@ -1,4 +1,4 @@
-# air-eau
+# air & eau
 
 Plug and Swap payloads between LoRa & Windy
 
