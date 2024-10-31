@@ -1,0 +1,23 @@
+# This is a basic workflow to Relay Weather info from SenseCAP LoRaWAN S2120 Weather Station to Windy Stations
+
+name: WAU-Wait-And-Update 3
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  schedule: # every 10 min
+  - cron: "10-59/10 * * * *"
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  # This workflow contains a single job called "WAU"
+  wau-wait-and-update:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: wau-wait-and-update
+        run: |
+          ./script-pws.sh ${{ secrets.SENSECAP_URL }} ${{ secrets.OID }} ${{ secrets.APIAccessKey }} ${{ secrets.EUI }} ${{ secrets.WINDY_API_KEY }}
+          git commit -a -m "Update data.json"
+          git push
