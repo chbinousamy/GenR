@@ -63,6 +63,7 @@ UV=$(cat data | grep 4190 | awk '{printf "%.1f", $2}')
 if [ -z "$UV" ]; then echo "UV is blank"; else curl_data="$curl_data, \"uv\":$UV"; fi
 #echo $curl_data
 
+rm data
 curl_data="$curl_data}]}" && echo $curl_data | jq > data.json && cat data.json && echo
 curl -X POST -H "Content-Type: application/json" --data @data.json https://stations.windy.com/pws/update/${WINDY_API_KEY}
 echo && date "+%H:%M:%S %d/%m/%y"
