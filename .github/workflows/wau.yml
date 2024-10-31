@@ -9,6 +9,9 @@ on:
   - cron: "10-59/10 * * * *"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+permissions:                    # Global permissions configuration starts here
+  contents: read                # 'read' access to repository contents
+  pull-requests: write          # 'write' access to pull requests
 jobs:
   # This workflow contains a single job called "WAU"
   wau-wait-and-update:
@@ -19,5 +22,5 @@ jobs:
       - name: wau-wait-and-update
         run: |
           ./script-pws.sh ${{ secrets.SENSECAP_URL }} ${{ secrets.OID }} ${{ secrets.APIAccessKey }} ${{ secrets.EUI }} ${{ secrets.WINDY_API_KEY }}
-          git commit -a -m "Update data.json"
-          git push
+      - name: Commit & Push changes
+        uses: actions-js/push@master
