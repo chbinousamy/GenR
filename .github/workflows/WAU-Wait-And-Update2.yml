@@ -24,6 +24,7 @@ jobs:
           date "+%H:%M:%S %d/%m/%y"
           sudo apt -y install mosquitto-clients nodejs
           ./script-pws.sh ${{ secrets.SENSECAP_URL }} ${{ secrets.OID }} ${{ secrets.APIAccessKey }} ${{ secrets.EUI }} ${{ secrets.WINDY_API_KEY }}
+          git pull
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
