@@ -69,5 +69,7 @@ curl_data="$curl_data}]}" && echo $curl_data | jq > latest.json && cat latest.js
 curl -i -X POST -H "Content-Type: application/json" --data @latest.json https://stations.windy.com/pws/update/${WINDY_API_KEY}
 echo 
 node update_data.js
+git commit -m "Update data with latest values"
+git push origin master
 date "+%H:%M:%S %d/%m/%y"
 
