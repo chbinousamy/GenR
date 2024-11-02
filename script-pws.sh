@@ -69,7 +69,7 @@ curl_data="$curl_data}]}" && echo $curl_data | jq > latest.json && cat latest.js
 curl -i -X POST -H "Content-Type: application/json" --data @latest.json https://stations.windy.com/pws/update/${WINDY_API_KEY}
 echo 
 node update_data.js
-git config --global user.name 'Gituhb Action Bot'
+git config --global user.name 'Github Action Bot'
 git config --global user.email 'githubaction-bot@users.noreply.github.com'
 git commit -am "Update data with latest values"
 git push
