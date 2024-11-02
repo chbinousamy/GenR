@@ -23,6 +23,7 @@ jobs:
         run: |
           date "+%H:%M:%S %d/%m/%y"
           sudo apt -y install mosquitto-clients nodejs
+          date "+%H:%M:%S %d/%m/%y"
           git pull
           ./script-pws.sh ${{ secrets.SENSECAP_URL }} ${{ secrets.OID }} ${{ secrets.APIAccessKey }} ${{ secrets.EUI }} ${{ secrets.WINDY_API_KEY }}
       - name: Commit & Push changes
