@@ -11,7 +11,7 @@ date "+%H:%M:%S %d/%m/%y"
 echo mosquitto_sub -v -h $SENSECAP_URL -t '/device_sensor_data/${{ OID }}/${{ EUI }}/1/vs/+' -u 'org-${{ OID }}' -P '${{ APIAccessKey}}' -I 'org-${{ OID }}-quickstart' -C 10 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' >> data
 mosquitto_sub -v -h $SENSECAP_URL -t /device_sensor_data/${OID}/${EUI}/1/vs/+ -u org-${OID} -P ${APIAccessKey} -I org-${OID}-quickstart -C 10 | awk -F '[/:,{}]' '{print $7" "$9" "$11 }' > data
 
-echo && cat data
+echo && date "+%H:%M:%S %d/%m/%y" && cat data
 curl_data="{\"observations\":[{\"station\":2"
 #echo $curl_data
         
