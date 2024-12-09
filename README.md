@@ -1,6 +1,6 @@
 # air & eau
 
-Plug and Swap payloads between LoRa & Windy
+Read & Write payloads between LoRa & Windy
 
 Exemple:
 
