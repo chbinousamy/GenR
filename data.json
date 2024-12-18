@@ -97850,6 +97850,19 @@
       "pressure": 102570,
       "precip": 0,
       "uv": 0
+    },
+    {
+      "station": 2,
+      "ts": 1734506997546,
+      "temp": 10.8,
+      "wind": 0,
+      "winddir": 92,
+      "gust": 0,
+      "humidity": 67,
+      "dewpoint": 4.92,
+      "pressure": 102580,
+      "precip": 0,
+      "uv": 0
     }
   ]
 }
