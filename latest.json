@@ -2,14 +2,14 @@
   "observations": [
     {
       "station": 2,
-      "ts": 1736379727455,
+      "ts": 1736380029458,
       "temp": 12.30,
       "wind": 0.00,
-      "winddir": 89,
-      "gust": 1.80,
+      "winddir": 144,
+      "gust": 0.00,
       "humidity": 92,
       "dewpoint": 11.04,
-      "pressure": 100900,
+      "pressure": 100920,
       "precip": 0.00,
       "uv": 0.0
     }
