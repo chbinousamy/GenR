@@ -165632,6 +165632,19 @@
       "pressure": 101520,
       "precip": 0,
       "uv": 0
+    },
+    {
+      "station": 2,
+      "ts": 1737473420102,
+      "temp": 12.4,
+      "wind": 0,
+      "winddir": 112,
+      "gust": 0,
+      "humidity": 73,
+      "dewpoint": 7.69,
+      "pressure": 101520,
+      "precip": 0,
+      "uv": 0
     }
   ]
 }
