@@ -1,0 +1,17 @@
+{
+  "observations": [
+    {
+      "station": 2,
+      "ts": 1737642823977,
+      "temp": 13.20,
+      "wind": 1.20,
+      "winddir": 162,
+      "gust": 1.70,
+      "humidity": 88,
+      "dewpoint": 11.26,
+      "pressure": 100780,
+      "precip": 0.00,
+      "uv": 0.0
+    }
+  ]
+}
