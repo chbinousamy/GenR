@@ -2,16 +2,16 @@
   "observations": [
     {
       "station": 2,
-      "ts": 1741345878948,
-      "temp": 15.60,
-      "wind": 0.90,
-      "winddir": 156,
-      "gust": 4.20,
-      "humidity": 63,
-      "dewpoint": 8.58,
-      "pressure": 101790,
+      "ts": 1741356501053,
+      "temp": 15.30,
+      "wind": 2.50,
+      "winddir": 317,
+      "gust": 4.10,
+      "humidity": 61,
+      "dewpoint": 7.82,
+      "pressure": 101630,
       "precip": 0.00,
-      "uv": 4.0
+      "uv": 1.0
     }
   ]
 }
