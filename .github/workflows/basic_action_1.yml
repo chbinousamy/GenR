@@ -55,11 +55,11 @@ jobs:
           if [ -z "$HUMIDITY" ]; then echo "HUMIDITY is blank"; else curl_data="$curl_data, \"humidity\":$HUMIDITY"; fi
           # echo $curl_data
           if [[ -z "$TEMP" || -z "$HUMIDITY" ]]; then
-	  	echo "One of TEMP or HUMIDITY is blank"
-          else
-	  	ALPHA=$(bc -l <<< "l($HUMIDITY/100) + 17.625*$TEMP/(243.04+$TEMP)")
-    		DEWT=$(bc -l <<< "(243.04 * $ALPHA / (17.625 - $ALPHA))")
-      		DEWT=`printf "%.2f" $DEWT`
+	    echo "One of TEMP or HUMIDITY is blank"
+     	  else
+	    ALPHA=$(bc -l <<< "l($HUMIDITY/100) + 17.625*$TEMP/(243.04+$TEMP)")
+    	    DEWT=$(bc -l <<< "(243.04 * $ALPHA / (17.625 - $ALPHA))")
+      	    DEWT=`printf "%.2f" $DEWT`
           fi
           if [ -z "$DEWT" ]; then echo "DEWT is blank"; else curl_data="$curl_data, \"dewpoint\":$DEWT"; fi
           #echo $curl_data
