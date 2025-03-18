@@ -5,8 +5,8 @@ name: WAU-Wait-And-Update 2
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  #schedule: # 5 min offset then every 10 min
-  #- cron: "5-59/10 * * * *"
+  schedule: # 5 min offset then every 10 min
+  - cron: "5-59/10 * * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
